@@ -6,7 +6,6 @@ import com.example.assigmentday7.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,26 +21,34 @@ public class UserController {
         return ResponseEntity.status(200).body(user);
     }
     @PostMapping("/add")
-    public ResponseEntity addUser(@RequestBody @Valid User user, Errors errors){
-        if(errors.hasErrors()){
-            String message=errors.getFieldError().getDefaultMessage();
-            return ResponseEntity.status(400).body(new ApiResponse(message));
-        }
+    public ResponseEntity addUser(@RequestBody@Valid User user){
         userService.addUser(user);
         return ResponseEntity.status(200).body(new ApiResponse("user added!!"));
     }
-    @PutMapping("/update/{index}")
-    public ResponseEntity updateUser(@PathVariable Integer id,@RequestBody@Valid User user,Errors errors){
-        if(errors.hasErrors()){
-            String message=errors.getFieldError().getDefaultMessage();
-            return ResponseEntity.status(400).body(new ApiResponse(message));
-        }
+    @PutMapping("/update/{id}")
+    public ResponseEntity updateUser(@PathVariable Integer id,@RequestBody@Valid User user){
         userService.updateUser(id,user);
         return ResponseEntity.status(200).body(new ApiResponse("user update!!"));
     }
-    @DeleteMapping("/delet/{index}")
+    @DeleteMapping("/delet/{id}")
     public String deleteUser(@PathVariable Integer id){
         userService.deleteUser(id);
         return "user delete";
     }
+    @GetMapping("/byid/{id}")
+    public ResponseEntity getUserById(@PathVariable Integer id){
+        User user=userService.getUserById(id);
+        return ResponseEntity.status(200).body(user);
+    }
+    @GetMapping("/bytitle/{name}")
+    public ResponseEntity getUserByName(@PathVariable String name){
+        User user=userService.getUserByName(name);
+        return ResponseEntity.status(200).body(user);
+    }
+    @GetMapping("/bytitle/{username}")
+    public ResponseEntity getUserByUsername(@PathVariable String username){
+        User user=userService.getUserByUsername(username);
+        return ResponseEntity.status(200).body(user);
+    }
+
 }
